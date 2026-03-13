@@ -43,42 +43,55 @@ public class Course {
     public void setName(String name) {
         this.name = name;
     }
+
     public String getName() {
         return name;
     }
+
     public void setCapacity(int capacity) {
         this.capacity = capacity;
     }
+
     public int getCapacity() {
         return capacity;
     }
+
     public void setYear(String year) {
         this.year = year;
     }
+
     public String getYear() {
         return year;
     }
+
     public void setOnline(boolean online) {
         this.online = online;
     }
+
     public boolean isOnline() {
         return online;
     }
+
     public void setDay(DayOfWeek day) {
         this.day = day;
     }
+
     public DayOfWeek getDay() {
         return day;
     }
+
     public void setTime(LocalTime time) {
         this.time = time;
     }
+
     public LocalTime getTime() {
         return time;
     }
+
     public void setDuration(float duration) {
         this.duration = duration;
     }
+
     public float getDuration() {
         return duration;
     }

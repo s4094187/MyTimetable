@@ -6,7 +6,7 @@ package console.program;
 public class Main {
 	
 	public static void main(String args[]){
-		Timetable timetable = new Timetable();
+		Timetable timetable = new Timetable("course.csv");
 		timetable.run();
 	}
 

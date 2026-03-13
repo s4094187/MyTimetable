@@ -1,14 +1,34 @@
 package console.program;
 
+import java.util.HashSet;
 import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 
 public class Timetable {
+    HashSet<Course> courses = new HashSet<>();
 
     /**
-     * The constructor for the timetable.
+     * The empty constructor for the timetable.
      */
     public Timetable() {
 
+    }
+
+    /**
+     * The full constructor for the timetable.
+     */
+    public Timetable(String fileName) {
+        try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] data = line.split(",");
+                System.out.println("Data: " + String.join(",", data));
+            }
+        } catch (IOException e) {
+            System.out.println("Error opening file " + fileName);
+        }
     }
 
     /**
@@ -51,7 +71,6 @@ public class Timetable {
         } while (!exit);
     }
 
-
     /**
      * The utility method to print menu options.
      */
@@ -77,20 +96,20 @@ public class Timetable {
      * The method to search by keyword to enroll.
      */
     public void search() {
-        System.out.println("Search");
+        System.out.println("Please provide a brand: ");
     }
 
     /**
      * The method to show enrolled courses.
      */
     public void showCourses() {
-        System.out.println("Show courses");
+        System.out.println("You don't have any courses enrolled.");
     }
 
     /**
      * The method to withdraw from a course.
      */
     public void withdraw() {
-        System.out.println("Withdraw");
+        System.out.println("You don't have any courses enrolled.");
     }
 }
