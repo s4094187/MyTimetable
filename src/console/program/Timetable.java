@@ -136,19 +136,42 @@ public class Timetable {
      */
     public void search() {
         System.out.println("Please provide a brand: ");
+        String searchTerm = readUserInput();
+        String banner = new String(new char[80]).replace('\u0000', '-');
+        courses.stream().anyMatch(c -> c.getName().contains(searchTerm));
+        System.out.println(banner + "\n" + "> Select from matching list\n" + banner);
+        System.out.printf("Options");
+        System.out.print("Please select: ");
     }
 
     /**
      * The method to show enrolled courses.
      */
     public void showCourses() {
-        System.out.println("You don't have any courses enrolled.");
+        if (enrolled.isEmpty()) {
+            System.out.println("You don't have any courses enrolled.");
+        }
+        else {
+            String banner = new String(new char[80]).replace('\u0000', '-');
+            System.out.println(banner + "\n" + "You have enrolled into the following course(s):\n" + banner);
+            System.out.printf("Courses");
+        }
+
     }
 
     /**
      * The method to withdraw from a course.
      */
     public void withdraw() {
-        System.out.println("You don't have any courses enrolled.");
+        if (enrolled.isEmpty()) {
+            System.out.println("You don't have any courses enrolled.");
+        }
+        else {
+            String banner = new String(new char[80]).replace('\u0000', '-');
+            System.out.println(banner + "\n" + "Please choose a course to withdraw:\n" + banner);
+            System.out.printf("Options");
+            System.out.print("Please select: ");
+            System.out.printf("You have withdrawn from: !");
+        }
     }
 }
