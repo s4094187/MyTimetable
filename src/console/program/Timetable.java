@@ -10,6 +10,7 @@ import java.io.IOException;
 
 public class Timetable {
     HashSet<Course> courses = new HashSet<>();
+    HashSet<Course> enrolled = new HashSet<>();
 
     /**
      * The empty constructor for the timetable.
@@ -59,6 +60,7 @@ public class Timetable {
                     day = DayOfWeek.valueOf(data[4]);
                     time = LocalTime.parse(data[5]);
                     duration = Float.parseFloat(data[6]);
+
                     newCourse = new Course(name, capacity, year, online, day, time, duration);
                     courses.add(newCourse);
                 }
