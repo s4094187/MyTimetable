@@ -1,5 +1,7 @@
 package console.program;
 
+import java.time.DayOfWeek;
+import java.time.LocalTime;
 import java.util.HashSet;
 import java.util.Scanner;
 import java.io.BufferedReader;
@@ -20,11 +22,46 @@ public class Timetable {
      * The full constructor for the timetable.
      */
     public Timetable(String fileName) {
+        Course newCourse;
         try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {
             String line;
+            //Course initialization variables
+            String name;
+            int capacity;
+            String year;
+            boolean online;
+            DayOfWeek day;
+            LocalTime time;
+            float duration;
+
             while ((line = br.readLine()) != null) {
                 String[] data = line.split(",");
-                System.out.println("Data: " + String.join(",", data));
+
+                //Check if line is header. If not, convert values and add course to hashset.
+                if (!data[0].equals("Course name")) {
+                    name = data[0];
+                    //Check if capacity is valid, if not set to -1 for n/a
+                    if (!data[1].equals("n/a")) {
+                        capacity = Integer.parseInt(data[1]);
+                    }
+                    else {
+                        capacity = -1;
+                    }
+                    year = data[2];
+                    //Check if delivery mode is valid
+                    if (data[3].equals("online")) {
+                        online = true;
+                    }
+                    else if (data[3].equals("face-to-face")) {
+                        online = false;
+                    }
+                    else continue;
+                    day = DayOfWeek.valueOf(data[4]);
+                    time = LocalTime.parse(data[5]);
+                    duration = Float.parseFloat(data[6]);
+                    newCourse = new Course(name, capacity, year, online, day, time, duration);
+                    courses.add(newCourse);
+                }
             }
         } catch (IOException e) {
             System.out.println("Error opening file " + fileName);

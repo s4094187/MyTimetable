@@ -1,7 +1,7 @@
 package console.program;
 
 /**
- * The Main class is the entry point of the sample console program.
+ * The Main class is the entry point of the console program.
  */
 public class Main {
 	
