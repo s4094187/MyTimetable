@@ -2,15 +2,21 @@ package console.program;
 
 import java.time.DayOfWeek;
 import java.time.LocalTime;
-import java.util.HashSet;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Scanner;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
 public class Timetable {
-    HashSet<Course> courses = new HashSet<>();
-    HashSet<Course> enrolled = new HashSet<>();
+    ArrayList<Course> courses = new ArrayList<>(); //Stores all existing courses
+    ArrayList<Course> enrolled = new ArrayList<>(); //Stores enrolled Courses
+    ArrayList<Course> search = new ArrayList<>(); //Stores search results
+    String stringInput; //User input in console
+    int listNum; //For storing numbers to print lists
+    String result;
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("H:mm");//Allows for time inputs like 8:04
 
     /**
      * The empty constructor for the timetable.
@@ -34,10 +40,8 @@ public class Timetable {
             DayOfWeek day;
             LocalTime time;
             float duration;
-
             while ((line = br.readLine()) != null) {
                 String[] data = line.split(",");
-
                 //Check if line is header. If not, convert values and add course to hashset.
                 if (!data[0].equals("Course name")) {
                     name = data[0];
@@ -50,15 +54,15 @@ public class Timetable {
                     }
                     year = data[2];
                     //Check if delivery mode is valid
-                    if (data[3].equals("online")) {
+                    if (data[3].equals("Online")) {
                         online = true;
                     }
-                    else if (data[3].equals("face-to-face")) {
+                    else if (data[3].equals("Face-to-face")) {
                         online = false;
                     }
                     else continue;
-                    day = DayOfWeek.valueOf(data[4]);
-                    time = LocalTime.parse(data[5]);
+                    day = DayOfWeek.valueOf(data[4].toUpperCase());//Uppercase to retain enum
+                    time = LocalTime.parse(data[5], formatter);
                     duration = Float.parseFloat(data[6]);
 
                     newCourse = new Course(name, capacity, year, online, day, time, duration);
@@ -79,7 +83,7 @@ public class Timetable {
             System.out.println("Welcome to MyTimetable!");
             printMenu();
 
-            String stringInput = readUserInput();
+            stringInput = readUserInput();
 
             // Check the user input and continue with the next iteration
             // if no input is provided
@@ -138,10 +142,19 @@ public class Timetable {
         System.out.println("Please provide a brand: ");
         String searchTerm = readUserInput();
         String banner = new String(new char[80]).replace('\u0000', '-');
-        courses.stream().anyMatch(c -> c.getName().contains(searchTerm));
         System.out.println(banner + "\n" + "> Select from matching list\n" + banner);
-        System.out.printf("Options");
+        listNum = 1;
+        for (Course course : courses) {
+            result = course.getName(); //Set both result and searchTerm to uppercase to be case-insensitive
+            searchTerm = searchTerm.toUpperCase();
+            if (result.toUpperCase().contains(searchTerm)) {
+                System.out.printf("   %d%s%s%n", listNum, ") " ,result);
+                listNum++;
+            }
+        }
+        System.out.printf("   %d%s%n", listNum, ") Go to main menu");
         System.out.print("Please select: ");
+        stringInput = readUserInput();
     }
 
     /**
