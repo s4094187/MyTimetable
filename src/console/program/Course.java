@@ -72,6 +72,15 @@ public class Course {
         return online;
     }
 
+    public String getDelivery() {
+        if (online) {
+            return "Online";
+        }
+        else {
+            return "Face-to-face";
+        }
+    }
+
     public void setDay(DayOfWeek day) {
         this.day = day;
     }

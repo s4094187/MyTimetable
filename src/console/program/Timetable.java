@@ -10,12 +10,13 @@ import java.io.FileReader;
 import java.io.IOException;
 
 public class Timetable {
+    static String banner = new String(new char[80]).replace('\u0000', '-');//Formatting for banner
     ArrayList<Course> courses = new ArrayList<>(); //Stores all existing courses
     ArrayList<Course> enrolled = new ArrayList<>(); //Stores enrolled Courses
     ArrayList<Course> search = new ArrayList<>(); //Stores search results
     String stringInput; //User input in console
     int listNum; //For storing numbers to print lists
-    String result;
+    Course result;
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("H:mm");//Allows for time inputs like 8:04
 
     /**
@@ -79,8 +80,8 @@ public class Timetable {
      */
     public void run() {
         boolean exit = false;
+        System.out.println("Welcome to MyTimetable!");
         do {
-            System.out.println("Welcome to MyTimetable!");
             printMenu();
 
             stringInput = readUserInput();
@@ -118,7 +119,6 @@ public class Timetable {
      * The utility method to print menu options.
      */
     public static void printMenu(){
-        String banner = new String(new char[80]).replace('\u0000', '-');
         System.out.println(banner + "\n" + "> Select from main menu!\n" + banner);
         System.out.printf("   %s%n", "1) Search by keyword to enroll");
         System.out.printf("   %s%n", "2) Show my enrolled courses");
@@ -141,20 +141,21 @@ public class Timetable {
     public void search() {
         System.out.println("Please provide a brand: ");
         String searchTerm = readUserInput();
-        String banner = new String(new char[80]).replace('\u0000', '-');
         System.out.println(banner + "\n" + "> Select from matching list\n" + banner);
         listNum = 1;
         for (Course course : courses) {
-            result = course.getName(); //Set both result and searchTerm to uppercase to be case-insensitive
+            result = course; //Set both result and searchTerm to uppercase to be case-insensitive
             searchTerm = searchTerm.toUpperCase();
-            if (result.toUpperCase().contains(searchTerm)) {
-                System.out.printf("   %d%s%s%n", listNum, ") " ,result);
+            if (result.getName().toUpperCase().contains(searchTerm)) {
+                search.add(result);
+                System.out.printf("   %d) %s%n", listNum, result.getName());
                 listNum++;
             }
         }
-        System.out.printf("   %d%s%n", listNum, ") Go to main menu");
+        System.out.printf("   %d) Go to main menu%n", listNum);
         System.out.print("Please select: ");
         stringInput = readUserInput();
+
     }
 
     /**
@@ -165,9 +166,19 @@ public class Timetable {
             System.out.println("You don't have any courses enrolled.");
         }
         else {
-            String banner = new String(new char[80]).replace('\u0000', '-');
             System.out.println(banner + "\n" + "You have enrolled into the following course(s):\n" + banner);
-            System.out.printf("Courses");
+            listNum = 1;
+
+            for (Course course : enrolled) {
+                result = course;
+                System.out.printf("   %d) " +
+                                course.getName() + "     " +
+                                course.getDelivery() + "     " +
+                                course.getTime() + "%n", listNum);
+                listNum++;
+            }
+
+            stringInput = readUserInput();
         }
 
     }
@@ -180,11 +191,21 @@ public class Timetable {
             System.out.println("You don't have any courses enrolled.");
         }
         else {
-            String banner = new String(new char[80]).replace('\u0000', '-');
             System.out.println(banner + "\n" + "Please choose a course to withdraw:\n" + banner);
-            System.out.printf("Options");
+            listNum = 1;
+
+            for (Course course : enrolled) {
+                result = course;
+                System.out.printf("   %d) " +
+                        course.getName() + "     " +
+                        course.getDelivery() + "     " +
+                        course.getTime() + "%n", listNum);
+                listNum++;
+            }
+
             System.out.print("Please select: ");
-            System.out.printf("You have withdrawn from: !");
+            stringInput = readUserInput();
+            System.out.printf("You have withdrawn from: %s!%n", result.getName());
         }
     }
 }
