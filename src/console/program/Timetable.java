@@ -3,7 +3,7 @@ package console.program;
 import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Scanner;
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -11,9 +11,9 @@ import java.io.IOException;
 
 public class Timetable {
     static String banner = new String(new char[80]).replace('\u0000', '-');//Formatting for banner
-    ArrayList<Course> courses = new ArrayList<>(); //Stores all existing courses
-    ArrayList<Course> enrolled = new ArrayList<>(); //Stores enrolled Courses
-    ArrayList<Course> search = new ArrayList<>(); //Stores search results
+    HashSet<Course> courses = new HashSet<>(); //Stores all existing courses
+    HashSet<Course> enrolled = new HashSet<>(); //Stores enrolled Courses
+    HashSet<Course> search = new HashSet<>(); //Stores search results
     String stringInput; //User input in console
     int listNum; //For storing numbers to print lists
     Course result;
@@ -139,7 +139,7 @@ public class Timetable {
      * The method to search by keyword to enroll.
      */
     public void search() {
-        System.out.println("Please provide a brand: ");
+        System.out.print("Please provide a brand: ");
         String searchTerm = readUserInput();
         System.out.println(banner + "\n" + "> Select from matching list\n" + banner);
         listNum = 1;
