@@ -3,7 +3,9 @@ package console.program;
 import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.HashSet;
+import java.time.format.TextStyle;
+import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Scanner;
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -11,9 +13,10 @@ import java.io.IOException;
 
 public class Timetable {
     static String banner = new String(new char[80]).replace('\u0000', '-');//Formatting for banner
-    HashSet<Course> courses = new HashSet<>(); //Stores all existing courses
-    HashSet<Course> enrolled = new HashSet<>(); //Stores enrolled Courses
-    HashSet<Course> search = new HashSet<>(); //Stores search results
+    ArrayList<Course> courses = new ArrayList<>(); //Stores all existing courses as arrayList
+    ArrayList<Course> enrolled = new ArrayList<>(); //Stores enrolled Courses as arrayList to ease retrieval from menu
+    ArrayList<Course> search = new ArrayList<>(); //Stores search results
+    //ArrayList is used instead of hashset. Easier to print courses and select from menu and make result match spec
     String stringInput; //User input in console
     int listNum; //For storing numbers to print lists
     Course result;
@@ -152,10 +155,13 @@ public class Timetable {
                 listNum++;
             }
         }
+        //Select course from arrayList using
         System.out.printf("   %d) Go to main menu%n", listNum);
         System.out.print("Please select: ");
         stringInput = readUserInput();
-
+        result = search.get(Integer.parseInt(stringInput) - 1); //-1 as arrayList starts at 0 and menu starts at 1
+        enrolled.add(result);
+        System.out.printf("You have enrolled in the course %s!%n", result.getName());
     }
 
     /**
@@ -171,14 +177,16 @@ public class Timetable {
 
             for (Course course : enrolled) {
                 result = course;
-                System.out.printf("   %d) " +
-                                course.getName() + "     " +
-                                course.getDelivery() + "     " +
-                                course.getTime() + "%n", listNum);
+                //Format
+                System.out.printf("   %d) %s     %s     %s %s-%s%n",
+                                listNum,
+                                course.getName(),
+                                course.getDelivery(),
+                                course.getDay().getDisplayName(TextStyle.SHORT, Locale.ENGLISH),
+                                course.getTime(),
+                                course.getTime().plusMinutes((long)(course.getDuration() * 60)));
                 listNum++;
             }
-
-            stringInput = readUserInput();
         }
 
     }
@@ -196,10 +204,13 @@ public class Timetable {
 
             for (Course course : enrolled) {
                 result = course;
-                System.out.printf("   %d) " +
-                        course.getName() + "     " +
-                        course.getDelivery() + "     " +
-                        course.getTime() + "%n", listNum);
+                System.out.printf("   %d) %s     %s     %s %s-%s%n",
+                        listNum,
+                        course.getName(),
+                        course.getDelivery(),
+                        course.getDay().getDisplayName(TextStyle.SHORT, Locale.ENGLISH),
+                        course.getTime(),
+                        course.getTime().plusMinutes((long)(course.getDuration() * 60)));
                 listNum++;
             }
 
