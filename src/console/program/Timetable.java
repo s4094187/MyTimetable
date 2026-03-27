@@ -14,7 +14,7 @@ import java.io.IOException;
 public class Timetable {
     static String banner = new String(new char[80]).replace('\u0000', '-');//Formatting for banner
     ArrayList<Course> courses = new ArrayList<>(); //Stores all existing courses as arrayList
-    ArrayList<Course> enrolled = new ArrayList<>(); //Stores enrolled Courses as arrayList to ease retrieval from menu
+    ArrayList<Course> enrolled = new ArrayList<>(); //Stores enrolled Courses as arrayList to maintain consistency
     ArrayList<Course> search = new ArrayList<>(); //Stores search results
     //ArrayList is used instead of hashset. Easier to print courses and select from menu and make result match spec
     String stringInput; //User input in console
@@ -160,8 +160,14 @@ public class Timetable {
         System.out.print("Please select: ");
         stringInput = readUserInput();
         result = search.get(Integer.parseInt(stringInput) - 1); //-1 as arrayList starts at 0 and menu starts at 1
-        enrolled.add(result);
-        System.out.printf("You have enrolled in the course %s!%n", result.getName());
+
+        //Check for dupe due to not using hashset for consistency
+        if (enrolled.contains(result)) {
+            System.out.println("You are already enrolled in this course.");
+        } else {
+            enrolled.add(result);
+            System.out.printf("You have enrolled in the course %s!%n", result.getName());
+        }
     }
 
     /**
@@ -173,22 +179,8 @@ public class Timetable {
         }
         else {
             System.out.println(banner + "\n" + "You have enrolled into the following course(s):\n" + banner);
-            listNum = 1;
-
-            for (Course course : enrolled) {
-                result = course;
-                //Format
-                System.out.printf("   %d) %s     %s     %s %s-%s%n",
-                                listNum,
-                                course.getName(),
-                                course.getDelivery(),
-                                course.getDay().getDisplayName(TextStyle.SHORT, Locale.ENGLISH),
-                                course.getTime(),
-                                course.getTime().plusMinutes((long)(course.getDuration() * 60)));
-                listNum++;
-            }
+            printEnrolled();
         }
-
     }
 
     /**
@@ -200,23 +192,33 @@ public class Timetable {
         }
         else {
             System.out.println(banner + "\n" + "Please choose a course to withdraw:\n" + banner);
-            listNum = 1;
-
-            for (Course course : enrolled) {
-                result = course;
-                System.out.printf("   %d) %s     %s     %s %s-%s%n",
-                        listNum,
-                        course.getName(),
-                        course.getDelivery(),
-                        course.getDay().getDisplayName(TextStyle.SHORT, Locale.ENGLISH),
-                        course.getTime(),
-                        course.getTime().plusMinutes((long)(course.getDuration() * 60)));
-                listNum++;
-            }
+            printEnrolled();
 
             System.out.print("Please select: ");
             stringInput = readUserInput();
-            System.out.printf("You have withdrawn from: %s!%n", result.getName());
+
+            result = enrolled.remove(Integer.parseInt(stringInput) - 1);
+            System.out.printf("You have withdrawn from %s!%n", result.getName());
+        }
+    }
+
+    /**
+     * Used by showCourses and withdraw to print enrolled courses.
+     */
+    public void printEnrolled() {
+        listNum = 1;
+
+        for (Course course : enrolled) {
+            result = course;
+            //Format
+            System.out.printf("   %d) %s     %s     %s %s-%s%n",
+                    listNum,
+                    course.getName(),
+                    course.getDelivery(),
+                    course.getDay().getDisplayName(TextStyle.SHORT, Locale.ENGLISH),
+                    course.getTime(),
+                    course.getTime().plusMinutes((long)(course.getDuration() * 60)));
+            listNum++;
         }
     }
 }
