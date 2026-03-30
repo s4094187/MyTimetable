@@ -168,6 +168,7 @@ public class Timetable {
             enrolled.add(result);
             System.out.printf("You have enrolled in the course %s!%n", result.getName());
         }
+        search.clear(); //clear for next search
     }
 
     /**
@@ -210,8 +211,8 @@ public class Timetable {
 
         for (Course course : enrolled) {
             result = course;
-            //Format
-            System.out.printf("   %d) %s     %s     %s %s-%s%n",
+            //Format so that columns are even with max title being advanced python programming
+            System.out.printf("   %d) %-27s %-16s %s %s-%s%n",
                     listNum,
                     course.getName(),
                     course.getDelivery(),
