@@ -21,6 +21,7 @@ public class Timetable {
     int listNum; //For storing numbers to print lists
     Course result;
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("H:mm");//Allows for time inputs like 8:04
+    boolean dupe; //For checking if course name duplicates
 
     /**
      * The empty constructor for the timetable.
@@ -162,9 +163,21 @@ public class Timetable {
         result = search.get(Integer.parseInt(stringInput) - 1); //-1 as arrayList starts at 0 and menu starts at 1
 
         //Check for dupe due to not using hashset for consistency
+        dupe = false;
+        for (int i = 1; i <= enrolled.size(); i++) {
+            if (enrolled.get(i).getName().equalsIgnoreCase(result.getName())) {
+                dupe = true;
+                break;
+            }
+        }
+
+        //Check if matching or if name match
         if (enrolled.contains(result)) {
             System.out.println("You are already enrolled in this course.");
-        } else {
+        } else if (dupe) {
+            System.out.println("You are already enrolled in this course.");
+        }
+        else {
             enrolled.add(result);
             System.out.printf("You have enrolled in the course %s!%n", result.getName());
         }
