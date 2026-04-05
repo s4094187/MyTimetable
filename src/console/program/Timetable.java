@@ -164,7 +164,7 @@ public class Timetable {
 
         //Check for dupe due to not using hashset for consistency
         dupe = false;
-        for (int i = 1; i <= enrolled.size(); i++) {
+        for (int i = 0; i < enrolled.size(); i++) {
             if (enrolled.get(i).getName().equalsIgnoreCase(result.getName())) {
                 dupe = true;
                 break;
