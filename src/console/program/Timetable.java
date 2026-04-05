@@ -160,26 +160,27 @@ public class Timetable {
         System.out.printf("   %d) Go to main menu%n", listNum);
         System.out.print("Please select: ");
         stringInput = readUserInput();
-        result = search.get(Integer.parseInt(stringInput) - 1); //-1 as arrayList starts at 0 and menu starts at 1
+        if (Integer.parseInt(stringInput) <= search.size()) {
+            result = search.get(Integer.parseInt(stringInput) - 1); //-1 as arrayList starts at 0 and menu starts at 1
 
-        //Check for dupe due to not using hashset for consistency
-        dupe = false;
-        for (int i = 0; i < enrolled.size(); i++) {
-            if (enrolled.get(i).getName().equalsIgnoreCase(result.getName())) {
-                dupe = true;
-                break;
+            //Check for dupe due to not using hashset for consistency
+            dupe = false;
+            for (int i = 0; i < enrolled.size(); i++) {
+                if (enrolled.get(i).getName().equalsIgnoreCase(result.getName())) {
+                    dupe = true;
+                    break;
+                }
             }
-        }
 
-        //Check if matching or if name match
-        if (enrolled.contains(result)) {
-            System.out.println("You are already enrolled in this course.");
-        } else if (dupe) {
-            System.out.println("You are already enrolled in this course.");
-        }
-        else {
-            enrolled.add(result);
-            System.out.printf("You have enrolled in the course %s!%n", result.getName());
+            //Check if matching or if name match
+            if (enrolled.contains(result)) {
+                System.out.println("You are already enrolled in this course.");
+            } else if (dupe) {
+                System.out.println("You are already enrolled in this course.");
+            } else {
+                enrolled.add(result);
+                System.out.printf("You have enrolled in the course %s!%n", result.getName());
+            }
         }
         search.clear(); //clear for next search
     }
