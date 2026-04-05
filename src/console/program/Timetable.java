@@ -27,7 +27,7 @@ public class Timetable {
      * The empty constructor for the timetable.
      */
     public Timetable() {
-
+        //No variables to set
     }
 
     /**
